@@ -17,7 +17,7 @@ class CreateSettingsTable extends Migration
             $table->string('key')->primary();
             $table->string('category');
             $table->string('description');
-            $table->text('value');
+            $table->text('value')->nullable();
         });
     }
 

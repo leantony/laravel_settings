@@ -67,7 +67,7 @@ trait ModifiesConfig
                     $settings[] = [
                         'key' => trim($n),
                         'category' => $category,
-                        'value' => $specific_value,
+                        'value' => serialize($specific_value),
                         'description' => $description
                     ];
                     // reset to category name
