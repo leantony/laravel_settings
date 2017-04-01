@@ -44,12 +44,12 @@ class ManageSettings extends Command
         $settings = settings();
         $put = $this->option('setup');
         $bind = $this->option('bind');
-        if ($put) {
+        if ($put == 'true') {
             $this->doPutNew($settings);
             // ensure that execution doesn't overflow to the next command
             return 0;
         }
-        if ($bind) {
+        if ($bind == 'true') {
             $this->replace($settings);
             return 0;
         }
