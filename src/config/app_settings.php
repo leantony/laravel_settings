@@ -8,13 +8,10 @@ return [
 
     'table_name' => 'settings',
 
-    /**
-     * Use the same name as the files in app/config/*
-     */
     'categories' => [
         'app' => [
             'name' => 'app',
-            'ignore' => '*'
+            'ignore' => ['providers', 'aliases', 'log', 'log_level', 'key', 'cipher']
         ],
         'mail' => [
             'name' => 'mail',
