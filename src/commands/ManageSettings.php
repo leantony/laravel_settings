@@ -42,7 +42,7 @@ class ManageSettings extends Command
     public function handle()
     {
         $settings = settings();
-        $put = $this->option('new');
+        $put = $this->option('setup');
         $bind = $this->option('bind');
         if ($put) {
             $this->doPutNew($settings);
