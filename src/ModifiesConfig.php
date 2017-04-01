@@ -13,14 +13,17 @@ trait ModifiesConfig
      */
     public function grab()
     {
-        $config = $this->app['config'];
+        $config_initial = $this->app['config'];
+
         $categories = $this->getCategories();
 
         $grabs = [];
+        // loop over specified categories, extracting what we need and
+        // ignoring what we don't need
         foreach ($categories as $key => $value) {
-            if ($config[$key]) {
-                $config = $config[$key];
-                $ignore = isset($value['ignore']) ? $value['ignore'] : null;
+            if (array_has($config_initial, $key)) {
+                $config = $config_initial[$key];
+                $ignore = is_array($value) ? array_get($value, 'ignore') : $value;
                 if ($ignore) {
                     if ($ignore == '*') {
                         $config = null;
@@ -59,6 +62,7 @@ trait ModifiesConfig
                 foreach ($value as $item => $name) {
                     $n .= '.' . $item;
                     $specific_value = $name;
+                    // default description
                     $description = 'Specify description for ' . $n;
                     $settings[] = [
                         'key' => trim($n),
@@ -66,6 +70,7 @@ trait ModifiesConfig
                         'value' => $specific_value,
                         'description' => $description
                     ];
+                    // reset to category name
                     $n = $category;
                 }
             } else {
