@@ -13,8 +13,8 @@ class ManageSettings extends Command
      * @var string
      */
     protected $signature = 'manage:settings 
-    {--new=true : Insert new settings into the database.}
-    {--reload=true : Reload cache by forcefully re-fetching from db.}
+    {--setup=true : Insert new settings into the database.}
+    {--bind=true : Bind values in the database to those in the app .}
     ';
 
     /**
@@ -43,10 +43,23 @@ class ManageSettings extends Command
     {
         $settings = settings();
         $put = $this->option('new');
+        $bind = $this->option('bind');
         if ($put) {
             $this->doPutNew($settings);
-            return 0;
         }
+        if ($bind) {
+            $this->replace($settings);
+        }
+    }
+
+    /**
+     * @param SettingsHelper $settings
+     */
+    protected function replace($settings)
+    {
+        $this->info("Binding laravel config variables to cached ones from db...");
+        $settings->replaceLoaded();
+        $this->info("Done...");
     }
 
     /**
