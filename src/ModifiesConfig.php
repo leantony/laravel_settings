@@ -90,7 +90,8 @@ trait ModifiesConfig
     {
         foreach ($this->getCategories() as $key => $value) {
             $values = $this->getByCategory($key);
-            $this->app['config']->set($values);
+            // get all values from the collection
+            $this->app['config']->set($values->all());
         }
     }
 }
