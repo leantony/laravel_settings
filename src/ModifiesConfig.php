@@ -91,7 +91,9 @@ trait ModifiesConfig
         foreach ($this->getCategories() as $key => $value) {
             $values = $this->getByCategory($key);
             // get all values from the collection
-            $this->app['config']->set($values->all());
+            if($values !== null){
+                $this->app['config']->set($values->all());
+            }
         }
     }
 }
