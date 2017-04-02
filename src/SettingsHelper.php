@@ -5,6 +5,8 @@ namespace Leantony\Settings;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Leantony\Settings\Models\SettingObserver;
+use Leantony\Settings\Models\Settings;
 
 class SettingsHelper
 {
@@ -27,6 +29,14 @@ class SettingsHelper
     public function forgetOne($category)
     {
         $this->getCache()->tags(['settings', $category])->flush();
+    }
+
+    /**
+     * Handle settings events
+     */
+    public static function observe()
+    {
+        Settings::observe(SettingObserver::class);
     }
 
     /**
