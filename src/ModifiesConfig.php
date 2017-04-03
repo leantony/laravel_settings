@@ -67,6 +67,7 @@ trait ModifiesConfig
                     $settings[] = [
                         'key' => trim($n),
                         'category' => $category,
+                        'multivalued' => count(json_decode($specific_value, JSON_OBJECT_AS_ARRAY)) > 1,
                         'value' => serialize($specific_value),
                         'description' => $description
                     ];
