@@ -190,7 +190,13 @@ class SettingsHelper
      */
     public function get($key, $default = null)
     {
-        $category = substr($key, 0, strpos($key, '.'));
+        if (str_contains($key, '.')) {
+            $category = substr($key, 0, strpos($key, '.'));
+        } else {
+            $category = $key;
+            return $this->getByCategory($category);
+        }
+
         $settings = $this->getByCategory($category);
         if ($settings === null) {
             return null;
