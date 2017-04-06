@@ -15,6 +15,7 @@ class ManageSettings extends Command
     protected $signature = 'manage:settings 
     {--setup : Insert new settings into the database.}
     {--bind : Bind values in the database to those in the app .}
+    {--refresh : Trigger a refresh of setting values in the cache with those in the database .}
     ';
 
     /**
@@ -44,11 +45,14 @@ class ManageSettings extends Command
         $settings = settings();
         if ($this->option('setup')) {
             $this->doPutNew($settings);
-            // ensure that execution doesn't overflow to the next command
             return 0;
         }
         if ($this->option('bind')) {
             $this->replace($settings);
+            return 0;
+        }
+        if ($this->option('refresh')) {
+            $this->refreshCache($settings);
             return 0;
         }
     }
