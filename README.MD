@@ -9,7 +9,7 @@ This package will allow managing of laravel config variables, from the database.
 ## Installation
 + Install the package from composer
 
-`composer install leantony/laravel_settings`
+`composer install leantony/laravel_settings:dev-master`
 
 + Add the service provider to app.php
 
@@ -44,10 +44,12 @@ php artisan manage:settings --setup
 ```
 > Will persist the config values into the database according to the setup defined in `app_settings.php`
 
-However, laravel will still load the config values from the files directly. Which is not what we want.
-We want laravel to replace those loaded from files, with the ones we have in our database at runtime. To achieve this, do the following
-+ Add the following method to your `AppServiceProvider` boot method.
+```php
+php artisan manage:settings --bind
+```
+> Will bind settings in the database to those in actual laravel config. Hence settings in the database can also be normally accessed using the `config()` helper.
 
+To ensure that the above is done automatically at boot, add the following method to your `AppServiceProvider` boot method.
 ```php 
     /**
      * Bootstrap any application services.
@@ -65,11 +67,10 @@ We want laravel to replace those loaded from files, with the ones we have in our
     }
 ```
 
-+ To fetch a setting value, use the helper method provided `setting($key = null, $value = null)`
-> If no argument is provided, an instance of `Leantony\Settings\SettingsHelper` is returned
-
 # Fetching settings
 The package provides a helper method `settings()`. Use it as shown below
+
+> If no argument is provided to the method, an instance of `Leantony\Settings\SettingsHelper` is returned
 
 
 To fetch a setting from the database, with a key of `environment`, and category of `app`, you
@@ -80,7 +81,7 @@ settings()->appEnvironment
 
 You can also do it like this
 ```php
-settings('app.environment)
+settings('app.environment')
 ```
 
 To fetch all settings by a category:
