@@ -13,8 +13,8 @@ class ManageSettings extends Command
      * @var string
      */
     protected $signature = 'manage:settings 
-    {--setup=true : Insert new settings into the database.}
-    {--bind=true : Bind values in the database to those in the app .}
+    {--setup : Insert new settings into the database.}
+    {--bind : Bind values in the database to those in the app .}
     ';
 
     /**
@@ -42,14 +42,12 @@ class ManageSettings extends Command
     public function handle()
     {
         $settings = settings();
-        $put = $this->option('setup');
-        $bind = $this->option('bind');
-        if ($put == 'true') {
+        if ($this->option('setup')) {
             $this->doPutNew($settings);
             // ensure that execution doesn't overflow to the next command
             return 0;
         }
-        if ($bind == 'true') {
+        if ($this->option('bind')) {
             $this->replace($settings);
             return 0;
         }
