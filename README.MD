@@ -68,7 +68,7 @@ To ensure that the above is done automatically at boot, add the following method
 ```
 
 # Fetching settings
-The package provides a helper method `settings()`. Use it as shown below
+Apart from using laravel config helper once binding is done, the package provides a helper method `settings()`. Use it as shown below
 
 > If no argument is provided to the method, an instance of `Leantony\Settings\SettingsHelper` is returned
 
