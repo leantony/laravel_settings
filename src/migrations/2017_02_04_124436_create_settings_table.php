@@ -1,26 +1,11 @@
 <?php
 
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class CreateSettingsTable extends Migration
 {
-    /**
-     * @var Application
-     */
-    private $application;
-
-    /**
-     * CreateSettingsTable constructor.
-     * @param Application $application
-     */
-    public function __construct(Application $application)
-    {
-        $this->application = $application;
-    }
-
     /**
      * Run the migrations.
      *
@@ -45,7 +30,7 @@ class CreateSettingsTable extends Migration
      */
     protected function getConfig($value)
     {
-        return $this->application['config']['app_settings.' . $value];
+        return config('app_settings.' . $value);
     }
 
     /**
