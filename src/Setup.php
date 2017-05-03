@@ -54,7 +54,7 @@ trait Setup
     /**
      * @return mixed
      */
-    protected function getCache()
+    public function getCache()
     {
         return $this->app['cache'];
     }
@@ -62,7 +62,7 @@ trait Setup
     /**
      * @return bool
      */
-    protected function shouldCache()
+    public function shouldCache()
     {
         return $this->app['config']['app_settings.cache'];
     }

@@ -40,7 +40,7 @@ class ManageSettings extends Command
      */
     public function handle()
     {
-        $settings = settings();
+        $settings = app(SettingsHelper::class);
         if ($this->option('setup')) {
             $this->doPutNew($settings);
             return 0;
