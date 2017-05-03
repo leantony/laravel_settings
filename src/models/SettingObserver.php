@@ -18,8 +18,6 @@ class SettingObserver
         /** @var $instance SettingsHelper */
 
         // clear the settings cache
-        $instance->forgetOne($setting->category);
-
-        $instance->refreshOne($setting->category);
+        $instance->replaceLoaded($setting->category);
     }
 }

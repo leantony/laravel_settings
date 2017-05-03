@@ -2,6 +2,8 @@
 
 namespace Leantony\Settings;
 
+use Illuminate\Support\Facades\Artisan;
+
 trait ModifiesConfig
 {
     use Setup;
@@ -85,16 +87,42 @@ trait ModifiesConfig
      * Replace specified config values with ones in the DB
      * This should be called in the boot method of a service provider
      *
+     * @param null $category
      * @return void
      */
-    public function replaceLoaded()
+    public function replaceLoaded($category = null)
     {
-        foreach ($this->getCategories() as $key => $value) {
-            $values = $this->getByCategory($key);
-            // get all values from the collection
-            if($values !== null){
-                $this->app['config']->set($values->all());
+        if ($category) {
+            $values = $this->getDB()
+                ->table($this->getTableName())
+                ->where(['category' => $category])
+                ->pluck('value', 'key');
+            if ($values !== null) {
+                $this->doCache($values);
             }
+        } else {
+            foreach ($this->getCategories() as $key => $value) {
+                $values = $this->getDB()
+                    ->table($this->getTableName())
+                    ->where(['category' => $key])
+                    ->pluck('value', 'key');
+                // get all values from the collection
+                if ($values !== null) {
+                    $this->doCache($values);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param null $values
+     */
+    public function doCache($values)
+    {
+        if ($this->shouldCache()) {
+            Artisan::call('config:clear');
+            $this->app['config']->set($values);
+            Artisan::call('config:cache');
         }
     }
 }

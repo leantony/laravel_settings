@@ -60,18 +60,10 @@ trait Setup
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    protected function getRootCacheKey()
+    protected function shouldCache()
     {
-        return $this->app['config']['app_settings.cache_key'];
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function getCacheDuration()
-    {
-        return $this->app['config']['app_settings.cache_duration'];
+        return $this->app['config']['app_settings.cache'];
     }
 }

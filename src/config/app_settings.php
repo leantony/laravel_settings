@@ -4,25 +4,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Cache Key
+    | Enable caching of settings
     |--------------------------------------------------------------------------
     |
-    | This key is used to denote the fact that the settings
-    | have been stored in the cache.
+    | cache settings retrieved from the database. This happens when the app loads
+    | or when the command 'settings:bind' is run
     |
     */
-    'cache_key' => 'app_settings_',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Cache Duration
-    |--------------------------------------------------------------------------
-    |
-    | This is a value in seconds used to denote for how long the settings should
-    | be cached.
-    |
-    */
-    'cache_duration' => 86400,
+    'cache' => false,
 
     /*
     |--------------------------------------------------------------------------

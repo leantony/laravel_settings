@@ -15,7 +15,6 @@ class ManageSettings extends Command
     protected $signature = 'manage:settings 
     {--setup : Insert new settings into the database.}
     {--bind : Bind values in the database to those in the app .}
-    {--refresh : Trigger a refresh of setting values in the cache with those in the database .}
     ';
 
     /**
@@ -28,7 +27,6 @@ class ManageSettings extends Command
     /**
      * Create a new command instance.
      *
-     * @return void
      */
     public function __construct()
     {
@@ -51,10 +49,28 @@ class ManageSettings extends Command
             $this->replace($settings);
             return 0;
         }
-        if ($this->option('refresh')) {
-            $this->refreshCache($settings);
-            return 0;
+    }
+
+    /**
+     * @param SettingsHelper $settings
+     */
+    protected function doPutNew($settings)
+    {
+        $this->info('Truncating the settings table...');
+        $this->laravel['db']->table($settings->getTableName())->truncate();
+        if ($settings->shouldCache()) {
+            $this->info('Clearing the config cache...');
+            $this->call('config:clear');
         }
+
+        $this->info('Inserting new values...');
+        $settings->insert($settings->grab());
+        if ($settings->shouldCache()) {
+            $this->info('Caching config...');
+            $this->call('config:cache');
+        }
+
+        $this->info('done...');
     }
 
     /**
@@ -65,32 +81,5 @@ class ManageSettings extends Command
         $this->info("Binding laravel config variables to cached ones from db...");
         $settings->replaceLoaded();
         $this->info("Done...");
-    }
-
-    /**
-     * @param SettingsHelper $settings
-     */
-    protected function doPutNew($settings)
-    {
-        $this->info('Truncating the settings table...');
-        $this->laravel['db']->table($settings->getTableName())->truncate();
-        $this->info('Clearing the settings cache...');
-        $settings->forget();
-        $this->info('Inserting and caching new values...');
-        $settings->insert($settings->grab());
-        $settings->cacheAll();
-        $this->info('done...');
-    }
-
-    /**
-     * @param SettingsHelper $settings
-     */
-    protected function refreshCache($settings)
-    {
-        $this->info('Clearing the settings cache...');
-        $settings->forget();
-        $this->info('Caching new values...');
-        $settings->cacheAll();
-        $this->info('done...');
     }
 }

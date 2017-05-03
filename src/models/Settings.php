@@ -10,10 +10,16 @@ class Settings extends Model
     protected $primaryKey = 'key';
     protected $fillable = ['key', 'value', 'category', 'description'];
 
-    public function __construct(array $attributes = [])
+    public static function boot()
     {
-        parent::__construct($attributes);
-        $this->table = settings()->getTableName();
+        parent::boot();
+
+        static::observe(SettingObserver::class);
+    }
+
+    public function getTable()
+    {
+        return app('config')->getTableName();
     }
 
     /**
@@ -42,6 +48,30 @@ class Settings extends Model
      */
     public function getValueAttribute($attribute)
     {
-        return settings()->unserialize($attribute);
+        return $this->unserialize($attribute);
+    }
+
+    /**
+     * Unserialize an attribute value
+     *
+     * @param $str
+     * @return mixed|null|string
+     */
+    public function unserialize($str)
+    {
+        try {
+            $value = unserialize($str);
+        } catch (\Exception $e) {
+            $this->app['log']->error($e->getMessage());
+            return null;
+        }
+
+        if (is_array($value)) {
+            return json_encode($value);
+        }
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+        return $value;
     }
 }

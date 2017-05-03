@@ -4,7 +4,6 @@ namespace Leantony\Settings\Providers;
 
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 use Leantony\Settings\Commands\ManageSettings;
-use Leantony\Settings\SettingsHelper;
 
 class ServiceProvider extends LaravelServiceProvider
 {
@@ -20,23 +19,9 @@ class ServiceProvider extends LaravelServiceProvider
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/../migrations/' => database_path('/migrations')
+            __DIR__ . '/../migrations/' => database_path('/migrations')
         ], 'migrations');
 
-        $this->loadHelpers();
-    }
-
-    /**
-     * Load helper files
-     *
-     * @return void
-     */
-    protected function loadHelpers()
-    {
-        $files = glob(__DIR__ . '/../helpers/*.php');
-        foreach ($files as $file) {
-            require_once($file);
-        }
     }
 
     /**
@@ -46,10 +31,6 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('settings', function ($app) {
-            return new SettingsHelper($app);
-        });
-
         $this->commands(ManageSettings::class);
     }
 }
